@@ -1,4 +1,4 @@
-name: Prueba Python
+name: Generar Excel
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
 
-  ejecutar-python:
+  generar-excel:
 
     runs-on: ubuntu-latest
 
@@ -19,21 +19,27 @@ jobs:
       - name: Descargar repositorio
         uses: actions/checkout@v4
 
-      - name: Instalar Python
+      - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Ejecutar script
-        run: python scripts/main.py
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Commit archivos generados
+      - name: Ejecutar script
+        run: |
+          python scripts/generar_excel.py
+
+      - name: Guardar cambios
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add data/
+          git add data/Pilotaje.xlsx
 
-          git diff --cached --quiet || git commit -m "Archivos generados automáticamente"
+          git diff --cached --quiet || git commit -m "Actualizar Pilotaje.xlsx"
 
           git push
