@@ -5,18 +5,34 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   prueba:
+
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Descargar repositorio
         uses: actions/checkout@v4
 
-      - name: Mostrar mensaje
+      - name: Crear archivo de prueba
         run: |
-          echo "=================================="
-          echo "GitHub Actions funciona correctamente"
-          echo "Repositorio: ${{ github.repository }}"
-          echo "Rama: ${{ github.ref }}"
-          echo "=================================="
+          mkdir -p data
+          echo "Proceso ejecutado correctamente." > data/prueba.txt
+          echo "" >> data/prueba.txt
+          echo "Repositorio: ${{ github.repository }}" >> data/prueba.txt
+          echo "Fecha: $(date)" >> data/prueba.txt
+
+      - name: Commit del archivo
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add data/prueba.txt
+
+          git diff --cached --quiet || git commit -m "Generado automáticamente"
+
+          git push
