@@ -1,0 +1,4 @@
+Python se ejecutó correctamente.
+
+Fecha: 2026-07-15 18:14:10.240665
+Próximo paso: generar Pilotaje.xlsx
